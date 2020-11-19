@@ -12,7 +12,7 @@ const generateItemElement = function (item) {
   let itemTitle = `<span class='shopping-item shopping-item__checked'>${item.name}</span>`;
   if (!item.checked) {
     itemTitle = `
-     <span class='shopping-item'>${item.name}</span>
+        <input class="shopping-item" type="text" value="${item.name}" />
     `;
   }
 
@@ -76,6 +76,7 @@ const handleNewItemSubmit = function () {
   });
 };
 
+
 const toggleCheckedForListItem = function (id) {
   const foundItem = store.items.find(item => item.id === id);
   foundItem.checked = !foundItem.checked;
@@ -127,6 +128,27 @@ const handleDeleteItemClicked = function () {
   });
 };
 
+const replaceItemName = function (itemID, newItemName) {
+  const idx = store.items.findIndex((item) => item.id === itemID);
+  store.items[idx].name = newItemName;
+  console.log(store.items[idx]);
+  console.log(newItemName);
+};
+
+const handleEditItem = function () {
+  $(".js-shopping-list").on("change", ".js-item-edit", function (event) {
+    event.preventDefault();
+    $(this).val();
+    console.log("user changed value");
+    let newItemName = $(this).val();
+    console.log(newItemName);
+    const itemID = getItemIdFromElement(event.currentTarget);
+    //call the replace function
+    replaceItemName(itemID, newItemName);
+  });
+}
+
+
 /**
  * Toggles the store.hideCheckedItems property
  */
@@ -145,6 +167,8 @@ const handleToggleFilterClick = function () {
   });
 };
 
+
+
 /**
  * This function will be our callback when the
  * page loads. It is responsible for initially 
@@ -159,7 +183,9 @@ const handleShoppingList = function () {
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
+  handleEditItem();
   handleToggleFilterClick();
+  
 };
 
 // when the page loads, call `handleShoppingList`
